@@ -1,0 +1,27 @@
+#!/bin/sh
+# USB打印机热插拔检测脚本
+
+case "$ACTION" in
+    add)
+        # USB设备插入
+        if [ "$PRODUCT" = "3f0/2b17/100" ] || [ "$PRODUCT" = "3f0/3d17/100" ]; then
+            # HP LaserJet 1020/1020 Plus
+            logger "检测到 HP LaserJet 1020 打印机"
+            
+            # 等待设备准备就绪
+            sleep 2
+            
+            # 自动添加打印机到CUPS
+            if [ -f /usr/sbin/lpadmin ]; then
+                /usr/sbin/lpadmin -p HP_LaserJet_1020 -E -v usb://HP/LaserJet%201020 -P /etc/cups/ppd/hp-lj1020.ppd
+                /usr/sbin/lpadmin -d HP_LaserJet_1020
+                logger "HP LaserJet 1020 打印机已自动添加到CUPS"
+            fi
+        fi
+        ;;
+        
+    remove)
+        # USB设备移除
+        logger "USB打印机已移除"
+        ;;
+esac

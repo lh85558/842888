@@ -1,0 +1,9 @@
+# 定时重启任务
+# 每周日凌晨3点重启系统
+0 3 * * 0 /sbin/reboot
+
+# 每天凌晨4点清理日志
+0 4 * * * /usr/bin/find /var/log -name "*.log" -mtime +7 -delete
+
+# 每天凌晨5点清理CUPS临时文件
+0 5 * * * /bin/rm -rf /tmp/cups/*
