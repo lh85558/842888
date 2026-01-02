@@ -1,0 +1,27 @@
+#!/bin/sh
+# USB打印机热插拔脚本
+
+case "$ACTION" in
+    add)
+        # 检查是否为打印机设备
+        if [ -e "/sys$DEVPATH/device/bInterfaceClass" ]; then
+            CLASS=$(cat /sys$DEVPATH/device/bInterfaceClass)
+            if [ "$CLASS" = "07" ]; then
+                logger -t printer-hotplug "USB打印机已连接: $PRODUCT"
+                
+                # 等待设备稳定
+                sleep 2
+                
+                # 重启CUPS服务以识别新打印机
+                /etc/init.d/cups restart
+                
+                # 发送通知到Web界面
+                echo "USB打印机已连接" > /tmp/printer_status
+            fi
+        fi
+        ;;
+    remove)
+        logger -t printer-hotplug "USB设备已断开: $PRODUCT"
+        echo "USB打印机已断开" > /tmp/printer_status
+        ;;
+esac
