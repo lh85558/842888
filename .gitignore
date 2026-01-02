@@ -1,0 +1,50 @@
+# 构建输出
+openwrt-build/
+output/
+build/
+*.bin
+*.img
+*.tar.gz
+
+# 临时文件
+tmp/
+*.tmp
+*.log
+*.swp
+*~
+
+# IDE文件
+.vscode/
+.idea/
+*.sublime-*
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 缓存
+.ccache/
+dl/
+feeds/
+
+# 配置文件备份
+*.bak
+*.orig
+
+# 密钥和证书
+*.key
+*.crt
+*.pem
+
+# 下载的源码包
+*.tar.bz2
+*.tar.xz
+*.zip
+
+# 构建日志
+build.log
+error.log
+
+# 个人配置
+.config.old
+.config.bak

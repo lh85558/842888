@@ -1,0 +1,33 @@
+-- THDN打印服务器中文语言包
+-- LuCI中文翻译
+
+return {
+	["Print Server"] = "打印服务器",
+	["CUPS Print Server"] = "CUPS打印服务器",
+	["Configure CUPS printing service for THDN Print Server"] = "为THDN打印服务器配置CUPS打印服务",
+	["General Settings"] = "基本设置",
+	["Enable CUPS"] = "启用CUPS",
+	["Port"] = "端口",
+	["Web Interface"] = "Web界面",
+	["Remote Administration"] = "远程管理",
+	["Printers"] = "打印机",
+	["Printer Name"] = "打印机名称",
+	["Type"] = "类型",
+	["USB Printer"] = "USB打印机",
+	["Network Printer"] = "网络打印机",
+	["Device URI"] = "设备URI",
+	["PPD File"] = "PPD文件",
+	["Enable"] = "启用",
+	["Service Status"] = "服务状态",
+	["CUPS Status"] = "CUPS状态",
+	["Connected Printers"] = "已连接打印机",
+	["Restart CUPS"] = "重启CUPS",
+	["Restart"] = "重启",
+	["Running"] = "运行中",
+	["Stopped"] = "已停止",
+	["No printers found"] = "未找到打印机",
+	["CUPS service restarted"] = "CUPS服务已重启",
+	["CUPS service restart successful"] = "CUPS服务重启成功",
+	["CUPS service restart failed"] = "CUPS服务重启失败",
+	["Checking..."] = "检查中..."
+}

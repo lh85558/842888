@@ -1,0 +1,55 @@
+#!/bin/sh
+# 打印机自动设置脚本
+
+# 等待USB子系统完全初始化
+sleep 5
+
+# 检查已连接的USB打印机
+for device in /dev/usb/lp*; do
+    if [ -e "$device" ]; then
+        logger -t printer-setup "发现USB打印机设备: $device"
+        
+        # 尝试获取打印机信息
+        printer_info=$(lsusb | grep -i "printer\|hp\|laserjet" | head -1)
+        if [ -n "$printer_info" ]; then
+            logger -t printer-setup "打印机信息: $printer_info"
+            
+            # 根据USB ID判断打印机型号并自动配置
+            usb_id=$(echo "$printer_info" | grep -o "[0-9a-f]\{4\}:[0-9a-f]\{4\}")
+            
+            case "$usb_id" in
+                "03f0:2b17"|"03f0:3d17")
+                    logger -t printer-setup "自动配置HP LaserJet 1020"
+                    # 添加CUPS打印机
+                    lpadmin -p HP_LaserJet_1020 -E -v "$device" -m HP-LaserJet_1020.ppd 2>/dev/null || true
+                    ;;
+                "03f0:4117"|"03f0:4217")
+                    logger -t printer-setup "自动配置HP LaserJet 1007/1008"
+                    lpadmin -p HP_LaserJet_1007 -E -v "$device" -m HP-LaserJet_1007.ppd 2>/dev/null || true
+                    ;;
+                "03f0:4317")
+                    logger -t printer-setup "自动配置HP LaserJet 1108"
+                    lpadmin -p HP_LaserJet_1108 -E -v "$device" -m HP-LaserJet_1108.ppd 2>/dev/null || true
+                    ;;
+                *)
+                    logger -t printer-setup "未知打印机型号，使用通用配置"
+                    lpadmin -p USB_Printer -E -v "$device" -m generic.ppd 2>/dev/null || true
+                    ;;
+            esac
+        fi
+    fi
+done
+
+# 设置默认打印机（如果有多个，设置第一个为默认）
+default_printer=$(lpstat -p | grep "printer" | head -1 | awk '{print $2}')
+if [ -n "$default_printer" ]; then
+    lpadmin -d "$default_printer"
+    logger -t printer-setup "设置默认打印机: $default_printer"
+fi
+
+# 启用CUPS服务
+/etc/init.d/cups enable
+/etc/init.d/cups start
+
+# 删除自己（只运行一次）
+rm -f /etc/uci-defaults/70-printer-autosetup

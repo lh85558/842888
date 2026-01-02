@@ -1,0 +1,40 @@
+#!/bin/sh
+# 最终清理和优化
+
+# 清理临时文件
+rm -rf /tmp/luci-*
+rm -rf /tmp/opkg-*
+rm -f /tmp/printer_status
+
+# 创建必要的运行时目录
+mkdir -p /var/log/cups
+mkdir -p /var/spool/cups
+mkdir -p /var/spool/cups/tmp
+mkdir -p /var/spool/cups/cache
+mkdir -p /tmp/printer_status
+
+# 设置正确的权限
+chmod 755 /var/log/cups
+chmod 755 /var/spool/cups
+chmod 1777 /var/spool/cups/tmp
+chmod 755 /tmp/printer_status
+
+# 创建初始状态文件
+echo "系统启动中..." > /tmp/printer_status
+
+# 确保所有服务都已正确启用
+/etc/init.d/cups enable
+/etc/init.d/cron enable
+/etc/init.d/hotplug2 enable
+
+# 应用网络配置
+/etc/init.d/network reload
+
+# 重启所有服务以确保配置生效
+/etc/init.d/cups restart
+/etc/init.d/cron restart
+
+logger -t thdn-setup "THDN打印服务器初始化完成"
+
+# 删除所有uci-defaults脚本（只运行一次）
+rm -f /etc/uci-defaults/*

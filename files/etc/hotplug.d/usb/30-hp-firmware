@@ -1,0 +1,61 @@
+#!/bin/sh
+# HP打印机固件加载脚本
+
+# HP打印机USB ID列表
+HP_PRINTERS="03f0:2b17 03f0:3d17 03f0:4117 03f0:4217 03f0:4317"
+
+check_hp_printer() {
+    local product="$1"
+    for hp_id in $HP_PRINTERS; do
+        if [ "$product" = "$hp_id" ]; then
+            return 0
+        fi
+    done
+    return 1
+}
+
+case "$ACTION" in
+    add)
+        if check_hp_printer "$PRODUCT"; then
+            logger -t hp-firmware "检测到HP打印机: $PRODUCT"
+            
+            # 等待设备完全初始化
+            sleep 3
+            
+            # 根据具体型号加载固件
+            case "$PRODUCT" in
+                "03f0:2b17"|"03f0:3d17")
+                    # HP LaserJet 1020/1020plus
+                    if [ -f "/usr/share/foo2zjs/sihp1020.dl" ]; then
+                        logger -t hp-firmware "加载HP LaserJet 1020固件"
+                        cat /usr/share/foo2zjs/sihp1020.dl > /dev/usb/lp0 2>/dev/null || true
+                    fi
+                    ;;
+                "03f0:4117"|"03f0:4217")
+                    # HP LaserJet 1007/1008
+                    if [ -f "/usr/share/foo2zjs/sihp1005.dl" ]; then
+                        logger -t hp-firmware "加载HP LaserJet 1007/1008固件"
+                        cat /usr/share/foo2zjs/sihp1005.dl > /dev/usb/lp0 2>/dev/null || true
+                    fi
+                    ;;
+                "03f0:4317")
+                    # HP LaserJet 1108
+                    logger -t hp-firmware "HP LaserJet 1108已连接，无需额外固件"
+                    ;;
+            esac
+            
+            # 重启CUPS以识别新打印机
+            sleep 2
+            /etc/init.d/cups restart
+            
+            # 更新状态
+            echo "HP打印机已连接: $PRODUCT" > /tmp/printer_status
+        fi
+        ;;
+    remove)
+        if check_hp_printer "$PRODUCT"; then
+            logger -t hp-firmware "HP打印机已断开: $PRODUCT"
+            echo "HP打印机已断开" > /tmp/printer_status
+        fi
+        ;;
+esac

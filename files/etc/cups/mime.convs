@@ -1,0 +1,37 @@
+# CUPS MIME conversions for THDN Print Server
+# Optimized for HP LaserJet printers
+
+# Text to PostScript
+text/plain			application/postscript		33	texttops
+
+# PDF to PostScript
+application/pdf			application/postscript		66	pdftops
+
+# PostScript to printer-specific formats
+application/postscript		application/vnd.hp-PCL		66	pstops
+application/postscript		application/x-pxl		66	pstops
+
+# Image to PostScript
+image/*				application/postscript		66imagetops
+
+# Application to PostScript
+application/*			application/postscript		66	applicationtops
+
+# Raw passthrough
+application/vnd.cups-raw	application/octet-stream	0	-
+
+# HP LaserJet specific conversions
+application/postscript	application/vnd.hp-PCL		100	foomatic-rip
+application/pdf		application/vnd.hp-PCL		100	foomatic-rip
+
+# foo2zjs driver conversions for HP LaserJet 1020/1020plus
+application/postscript	application/vnd.cups-raster	100	foomatic-rip
+application/vnd.cups-raster	application/octet-stream	100	foo2zjs
+
+# foo2xqx driver conversions for HP LaserJet 1007/1008
+application/postscript	application/vnd.cups-raster	100	foomatic-rip
+application/vnd.cups-raster	application/octet-stream	100	foo2xqx
+
+# foo2hp driver conversions for HP LaserJet 1108
+application/postscript	application/vnd.cups-raster	100	foomatic-rip
+application/vnd.cups-raster	application/octet-stream	100	foo2hp

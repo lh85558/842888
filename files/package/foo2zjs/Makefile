@@ -86,4 +86,52 @@ define Package/foo2zjs/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/*.ppd $(1)/usr/share/cups/model/
 	
 	# Install ICC profiles
+	$(INSTALL_DIR) $(1)/usr/share/foo2zjs
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/icm/*.icm $(1)/usr/share/foo2zjs/
+endef
+
+define Package/foo2xqx/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
+	$(INSTALL_DIR) $(1)/usr/share/cups/model
 	
+	# Install foo2xqx binary
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2xqx $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2xqx-wrapper $(1)/usr/bin/
+	
+	# Install CUPS filter
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2xqx-wrapper $(1)/usr/lib/cups/filter/foo2xqx
+	
+	# Install PPD files
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/HP-LaserJet_1020.ppd $(1)/usr/share/cups/model/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/HP-LaserJet_1020plus.ppd $(1)/usr/share/cups/model/
+endef
+
+define Package/foo2hp/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/usr/lib/cups/filter
+	$(INSTALL_DIR) $(1)/usr/share/cups/model
+	
+	# Install foo2hp binary
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2hp $(1)/usr/bin/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2hp-wrapper $(1)/usr/bin/
+	
+	# Install CUPS filter
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/foo2hp-wrapper $(1)/usr/lib/cups/filter/foo2hp
+	
+	# Install PPD files for HP 1007/1008/1108
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/HP-LaserJet_1007.ppd $(1)/usr/share/cups/model/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/HP-LaserJet_1008.ppd $(1)/usr/share/cups/model/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/PPD/HP-LaserJet_1108.ppd $(1)/usr/share/cups/model/
+endef
+
+define Package/foo2zjs-common/install
+	$(INSTALL_DIR) $(1)/usr/share/foo2zjs
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/firmware/sihp1005.dl $(1)/usr/share/foo2zjs/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/firmware/sihp1020.dl $(1)/usr/share/foo2zjs/
+endef
+
+$(eval $(call BuildPackage,foo2zjs))
+$(eval $(call BuildPackage,foo2xqx))
+$(eval $(call BuildPackage,foo2hp))
+$(eval $(call BuildPackage,foo2zjs-common))

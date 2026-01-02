@@ -1,0 +1,9 @@
+# THDN打印服务器定时任务
+# 每周日凌晨3点自动重启
+0 3 * * 0 /sbin/reboot
+
+# 每天凌晨2点清理CUPS日志
+0 2 * * * /usr/bin/find /var/log/cups -name "*.log" -mtime +7 -delete
+
+# 每小时检查打印机状态
+0 * * * * /usr/bin/lpstat -p > /tmp/printer_status 2>/dev/null

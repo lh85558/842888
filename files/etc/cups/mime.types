@@ -1,0 +1,42 @@
+# CUPS MIME types for THDN Print Server
+# Based on standard CUPS mime.types, optimized for size
+
+# Application files
+application/octet-stream		bin
+application/pdf			pdf
+application/postscript		ps eps
+application/vnd.cups-banner	banner
+application/vnd.cups-command	command
+application/vnd.cups-pdf	pdf
+application/vnd.cups-postscript	ps
+application/vnd.cups-raster	ras
+application/vnd.cups-raw		raw
+
+# Image files
+image/gif			gif
+image/jpeg			jpg jpeg
+image/png			png
+image/tiff			tiff tif
+image/x-bitmap			bmp
+image/x-portable-anymap		pnm
+image/x-portable-bitmap		pbm
+image/x-portable-graymap	pgm
+image/x-portable-pixmap		ppm
+image/x-sgi-rgb			rgb
+image/x-xbitmap			xbm
+image/x-xpixmap			xpm
+
+# Text files
+text/html			html htm
+text/plain			txt
+text/tab-separated-values	tsv
+text/x-c			c cc cpp
+text/x-c++			cpp cxx
+text/x-shell-script		sh
+
+# Printer-specific types
+application/vnd.hp-PCL		pcl
+application/vnd.hp-PCLXL	pclxl
+application/x-cpcl		cpcl
+application/x-pcl		pcl
+application/x-pxl		pxl

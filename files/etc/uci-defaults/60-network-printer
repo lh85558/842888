@@ -1,0 +1,39 @@
+#!/bin/sh
+# 网络打印机支持配置
+
+# 启用mDNS/Bonjour服务
+uci -q batch <<-EOF >/dev/null
+	delete system.@mdns[-1]
+	add system mdns
+	set system.@mdns[-1].enabled='1'
+	set system.@mdns[-1].port='5353'
+	commit system
+EOF
+
+# 配置CUPS广播
+if [ -f /etc/cups/cupsd.conf ]; then
+    # 确保CUPS配置包含广播设置
+    if ! grep -q "BrowseLocalProtocols" /etc/cups/cupsd.conf; then
+        echo "BrowseLocalProtocols dnssd" >> /etc/cups/cupsd.conf
+    fi
+    
+    if ! grep -q "BrowseProtocols" /etc/cups/cupsd.conf; then
+        echo "BrowseProtocols dnssd" >> /etc/cups/cupsd.conf
+    fi
+fi
+
+# 配置防火墙允许CUPS广播
+if [ -f /etc/config/firewall ]; then
+    uci -q batch <<-EOF >/dev/null
+        add firewall rule
+        set firewall.@rule[-1].name='Allow-CUPS-Broadcast'
+        set firewall.@rule[-1].src='lan'
+        set firewall.@rule[-1].proto='udp'
+        set firewall.@rule[-1].dest_port='5353'
+        set firewall.@rule[-1].target='ACCEPT'
+        commit firewall
+    EOF
+fi
+
+# 删除自己
+rm -f /etc/uci-defaults/60-network-printer

@@ -1,0 +1,11 @@
+#!/bin/sh
+# LuCI CUPS模块初始化
+
+uci -q batch <<-EOF >/dev/null
+	add ucitrack
+	set ucitrack.@cups[-1].init=cups
+	commit ucitrack
+EOF
+
+# 删除自己
+rm -f /etc/uci-defaults/40-luci-cups

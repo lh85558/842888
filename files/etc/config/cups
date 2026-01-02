@@ -1,0 +1,29 @@
+# THDN打印服务器CUPS配置
+
+config cups 'main'
+	option enabled '1'
+	option port '631'
+	option web_interface '1'
+	option remote_admin '0'
+
+# 示例打印机配置
+config printer
+	option name 'HP_LaserJet_1020'
+	option type 'usb'
+	option device 'usb://HP/LaserJet%201020'
+	option ppd '/usr/share/cups/model/HP-LaserJet_1020.ppd'
+	option enabled '1'
+
+config printer
+	option name 'HP_LaserJet_1007'
+	option type 'usb'
+	option device 'usb://HP/LaserJet%201007'
+	option ppd '/usr/share/cups/model/HP-LaserJet_1007.ppd'
+	option enabled '1'
+
+config printer
+	option name 'HP_LaserJet_1108'
+	option type 'usb'
+	option device 'usb://HP/LaserJet%201108'
+	option ppd '/usr/share/cups/model/HP-LaserJet_1108.ppd'
+	option enabled '1'
