@@ -66,7 +66,9 @@ jobs:
     - name: Download sources
       run: |
         cd openwrt-build/openwrt
-        make download -j$(nproc)
+        sed -i 's/downloads.openwrt.org/mirrors.tuna.tsinghua.edu.cn\/openwrt/g' ./feeds.conf.default
+        ./scripts/feeds update -a
+        make download -j$(($(nproc)/2))  # 并行数减半，日志更整洁
         
     - name: Compile firmware
       run: |
