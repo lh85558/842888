@@ -71,7 +71,7 @@ jobs:
     - name: Compile OpenWrt
       run: |
          cd openwrt-build/openwrt
-         make -j$(($(nproc)/2)) V=s > compile_full.log 2>&1
+         make -j$(($(nproc)/2)) V=s
          
     - name: Check firmware size
       run: |
