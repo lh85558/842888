@@ -72,7 +72,7 @@ jobs:
       run: |
          cd openwrt-build/openwrt
          make clean package/feeds/packages/libpng/clean
-         make -j$(($(nproc)/2)) V=w
+         make -j1 V=s
          
     - name: Check firmware size
       run: |
